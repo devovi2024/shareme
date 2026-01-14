@@ -1,94 +1,55 @@
-"use client";
-
-import Link from "next/link";
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "@/components/ui/card";
+import { StarIcon } from "lucide-react";
+import Link from "next/link";
 import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import VotingButtons from "./voting-button";
+import { ProductType } from "@/types";
 
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  tags: string[];
-  votes: number;
-  isFeatured: boolean;
-}
-
-export default function ProductCard({
-  product,
-}: {
-  product: Product;
-}) {
+export default function ProductCard({ product }: { product: ProductType }) {
+  const hasVoted = false;
   return (
-    <Card className="p-5 hover:shadow-xl transition-all duration-300 ease-in-out">
-      <div className="flex items-start justify-between gap-6">
-
-        <div className="flex-1 space-y-3">
-          <CardHeader className="p-0 space-y-1">
-            <CardTitle className="text-lg font-semibold leading-snug">
-              <Link
-                href={`/products/${product.id}`}
-                className="hover:text-primary hover:underline underline-offset-4 transition-colors duration-200"
-              >
-                {product.name}
-              </Link>
-            </CardTitle>
-
-            <CardDescription className="text-sm text-muted-foreground">
-              {product.description}
-            </CardDescription>
-          </CardHeader>
-
-          <CardFooter className="p-0 flex flex-wrap gap-2">
-            {product.tags.map((tag) => (
-              <Badge
-                key={tag}
-                variant="secondary"
-                className="text-xs px-2 py-1"
-              >
+    <Link href={`/products/${product.slug}`}>
+      <Card className="group card-hover hover:bg-primary-foreground/10 border-solid border-gray-400 min-h-[200px]">
+        <CardHeader className="flex-1">
+          <div className="flex items-start gap-4">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-lg group-hover:text-primary transition-colors">
+                  {product.name}
+                </CardTitle>
+                {product.voteCount > 100 && (
+                  <Badge className="gap-1 bg-primary text-primary-foreground">
+                    <StarIcon className="size-3 fill-current" />
+                    Featured
+                  </Badge>
+                )}
+              </div>
+              <CardDescription>{product.description}</CardDescription>
+            </div>
+            {/** Voting buttons */}
+            <VotingButtons
+              hasVoted={hasVoted}
+              voteCount={product.voteCount}
+              productId={product.id}
+            />
+          </div>
+        </CardHeader>
+        <CardFooter>
+          <div className="flex items-center gap-2">
+            {product.tags?.map((tag) => (
+              <Badge variant="secondary" key={tag}>
                 {tag}
               </Badge>
             ))}
-          </CardFooter>
-        </div>
-
-        <div className="flex flex-col items-center gap-3">
-          {product.isFeatured && (
-            <Badge variant="outline" className="text-xs px-2 py-1">
-              ⭐ Featured
-            </Badge>
-          )}
-
-          <div className="flex flex-col items-center gap-1">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={(e) => e.stopPropagation()}
-              className="p-2"
-            >
-              <ChevronUpIcon className="h-4 w-4" />
-            </Button>
-
-            <span className="text-sm font-medium">{product.votes}</span>
-
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={(e) => e.stopPropagation()}
-              className="p-2"
-            >
-              <ChevronDownIcon className="h-4 w-4" />
-            </Button>
           </div>
-        </div>
-      </div>
-    </Card>
+        </CardFooter>
+      </Card>
+    </Link>
   );
 }

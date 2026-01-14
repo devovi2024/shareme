@@ -1,5 +1,5 @@
 {
-  "id": "20ab5c66-d32e-45cb-96ff-1323bb7e0fba",
+  "id": "3fb7f1bb-3c4b-4acb-be10-4320bad68c6b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -16,19 +16,19 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(255)",
+          "type": "varchar(120)",
           "primaryKey": false,
           "notNull": true
         },
         "slug": {
           "name": "slug",
-          "type": "varchar(255)",
+          "type": "varchar(140)",
           "primaryKey": false,
           "notNull": true
         },
         "tagline": {
           "name": "tagline",
-          "type": "text",
+          "type": "varchar(200)",
           "primaryKey": false,
           "notNull": false
         },
@@ -40,7 +40,7 @@
         },
         "website_url": {
           "name": "website_url",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -54,34 +54,35 @@
           "name": "vote_count",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": 0
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
         },
         "approved_at": {
           "name": "approved_at",
-          "type": "timestamp",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
         },
         "status": {
           "name": "status",
-          "type": "varchar(50)",
+          "type": "varchar(20)",
           "primaryKey": false,
           "notNull": false,
           "default": "'pending'"
         },
         "submitted_by": {
           "name": "submitted_by",
-          "type": "varchar(255)",
+          "type": "varchar(120)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'anonymous'"
         },
         "user_id": {
           "name": "user_id",
@@ -112,11 +113,11 @@
           "method": "btree",
           "with": {}
         },
-        "products_organization_idx": {
-          "name": "products_organization_idx",
+        "products_status_idx": {
+          "name": "products_status_idx",
           "columns": [
             {
-              "expression": "organization_id",
+              "expression": "status",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -127,11 +128,11 @@
           "method": "btree",
           "with": {}
         },
-        "products_status_idx": {
-          "name": "products_status_idx",
+        "products_organization_idx": {
+          "name": "products_organization_idx",
           "columns": [
             {
-              "expression": "status",
+              "expression": "organization_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"

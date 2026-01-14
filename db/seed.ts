@@ -1,22 +1,56 @@
-import 'dotenv/config'; 
-import { db } from "@/db/index";
-import { products } from "@/db/schema";
-import { productsSeed } from "@/db/data";
+import "dotenv/config";
+import { drizzle } from "drizzle-orm/neon-http";
+import { products } from "./schema";
+import { allProducts } from "./data";
 
-const seedProducts = async () => {
-  try {
-    console.log("Seeding products...");
+const db = drizzle(process.env.DATABASE_URL!);
 
-    for (const product of productsSeed) {
-      await db.insert(products).values(product).onConflictDoNothing();
-    }
+async function main() {
+  console.log(" Seeding database...");
 
-    console.log("Products seeded successfully!");
-    process.exit(0);
-  } catch (err) {
-    console.error("Error seeding products:", err);
-    process.exit(1);
+  // Clear existing data
+  await db.delete(products);
+  console.log(" Cleared existing data");
+
+  // Insert products from data.ts
+  for (const product of allProducts) {
+    await db.insert(products).values({
+      name: product.name,
+      slug: product.slug,
+      tagline: product.tagline,
+      description: product.description,
+      websiteUrl: product.websiteUrl,
+      tags: product.tags,
+      voteCount: product.voteCount || 0,
+      createdAt: product.createdAt,
+      approvedAt: product.approvedAt,
+      status: product.status,
+      submittedBy: product.submittedBy,
+    });
+
+    console.log(
+      ` Added product: ${product.name} (${product.voteCount || 0} votes)`
+    );
   }
-};
 
-seedProducts();
+  // Verify inserted products
+  const insertedProducts = await db.select().from(products);
+  console.log(`\n🎉 Successfully seeded ${insertedProducts.length} products!`);
+
+  console.log("\n📦 Products in database:");
+  insertedProducts.forEach((product) => {
+    console.log(
+      `  - ${product.name} (${product.slug}) - ${product.voteCount} votes`
+    );
+  });
+}
+
+main()
+  .catch((error) => {
+    console.error("❌ Error seeding database:", error);
+    process.exit(1);
+  })
+  .finally(() => {
+    console.log("\n✨ Seeding complete!");
+    process.exit(0);
+  });

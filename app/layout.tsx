@@ -1,39 +1,29 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
-
 import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
+const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ShareMe",
+  title: "iBuiltThis - Share Your Creations, Discover New Launches",
   description:
-    "ShareMe is a platform for building and sharing your own projects with the world.",
+    "A community platform for creators to showcase their apps, AI tools, SaaS products, and creative projects. Authentic launches, real builders, genuine feedback.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-      <ClerkProvider
-        publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-        appearance={{
-
-          variables: { colorPrimary: "#6366f1" },
-          elements: {
-            banner: "hidden" 
-          }
-        }}
-      >
-
+    <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} antialiased bg-gray-50`}>
+        <body className={`${outfit.className} antialiased`}>
           <Header />
-          <main className="min-h-[80vh]">{children}</main>
+          {children}
           <Footer />
         </body>
       </html>

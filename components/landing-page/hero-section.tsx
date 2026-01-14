@@ -1,26 +1,26 @@
-"use client";
-
-import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-  Sparkles,
-  Rocket,
-  RocketIcon,
-  UsersIcon,
+  ArrowRightIcon,
   EyeIcon,
+  RocketIcon,
+  SparklesIcon,
+  UsersIcon,
 } from "lucide-react";
-
-import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
+import Link from "next/link";
 import StatsCard from "./stats-card";
 
 const LiveBadge = () => {
   return (
     <Badge
       variant="outline"
-      className="px-5 py-2 mb-6 text-sm bg-background/70 backdrop-blur-md border-muted shadow-sm"
+      className="px-4 py-2 mb-8 text-sm backdrop-blur-sm"
     >
-      <span className="flex items-center gap-2 text-muted-foreground">
-        <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+      <span className="relative flex h-2 w-2">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+      </span>
+      <span className="text-muted-foreground">
         Join thousands of creators sharing their work
       </span>
     </Badge>
@@ -30,65 +30,61 @@ const LiveBadge = () => {
 const statsData = [
   {
     icon: RocketIcon,
-    value: "2.5k",
+    value: "2.5K+",
     label: "Projects Shared",
-    hasBorder: false,
   },
   {
     icon: UsersIcon,
-    value: "1.2k",
+    value: "10K+",
     label: "Active Creators",
     hasBorder: true,
   },
   {
     icon: EyeIcon,
-    value: "48k",
-    label: "Monthly Views",
-    hasBorder: true,
+    value: "50K+",
+    label: "Monthly Visitors",
   },
 ];
 
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-background">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex flex-col items-center justify-center text-center py-16 lg:py-28 space-y-6">
-
+    <section className="relative overflow-hidden bg-linear-to-b from-background via-background to-muted/20">
+      <div className="wrapper">
+        <div className="flex flex-col items-center justify-center lg:py-24 py-12 text-center">
           <LiveBadge />
-
-          <h1 className="max-w-4xl text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 max-w-5xl">
             Share What You&apos;ve Built, Discover What&apos;s Launching
           </h1>
-
-          <p className="max-w-2xl text-muted-foreground text-base md:text-lg">
-            A community platform for creators to showcase apps, AI tools,
-            SaaS products, and creative projects. Authentic launches,
-            real builders, genuine feedback.
+          <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-2xl leading-relaxed">
+            A community platform for creators to showcase their apps, AI tools,
+            SaaS products, and creative projects. Authentic launches, real
+            builders, genuine feedback.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <Button size="lg" className="gap-2 shadow-md">
-              <Sparkles className="h-5 w-5" />
-              <Link href="#">Share Your Project</Link>
+          <div className="flex flex-col sm:flex-row gap-4 mb-16">
+            <Button asChild size="lg" className="text-base px-8 shadow-lg">
+              <Link href="/submit">
+                <SparklesIcon className="size-5" />
+                Share Your Project
+              </Link>
             </Button>
-
-            <Button size="lg" variant="outline" className="gap-2">
-              <Rocket className="h-5 w-5" />
-              <Link href="#">Explore Projects</Link>
+            <Button
+              asChild
+              size="lg"
+              className="text-base px-8 shadow-lg"
+              variant="secondary"
+            >
+              <Link href="/explore">
+                Explore Projects <ArrowRightIcon className="size-5" />
+              </Link>
             </Button>
           </div>
 
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 max-w-2xl w-full">
             {statsData.map((stat) => (
               <StatsCard key={stat.label} {...stat} />
             ))}
           </div>
-
         </div>
-      </div>
-
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-1/3 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/20 blur-3xl" />
       </div>
     </section>
   );
