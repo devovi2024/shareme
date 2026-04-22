@@ -8,7 +8,7 @@ export default async function RecentlyLaunchedProducts() {
   const recentlyLaunchedProducts = await getRecentlyLaunchedProducts();
 
   return (
-    <section className="py-20">
+    <section className="relative py-24">
       <div className="wrapper space-y-12">
         <SectionHeader
           title="Recently Launched"
@@ -24,7 +24,7 @@ export default async function RecentlyLaunchedProducts() {
           </div>
         ) : (
           <EmptyState
-            message="No products launched in the last week. Check back soon for new launches."
+            message="No products launched in the last week. Check back soon."
             icon={CalendarIcon}
           />
         )}

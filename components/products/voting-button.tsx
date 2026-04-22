@@ -1,4 +1,5 @@
 "use client";
+
 import {
   downvoteProductAction,
   upvoteProductAction,
@@ -40,7 +41,7 @@ export default function VotingButtons({
 
   return (
     <div
-      className="flex flex-col items-center gap-1 shrink-0"
+      className="flex flex-col items-center gap-1 rounded-xl border bg-muted/30 p-1 backdrop-blur"
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -50,27 +51,29 @@ export default function VotingButtons({
         onClick={handleUpvote}
         variant="ghost"
         size="icon-sm"
+        disabled={isPending}
         className={cn(
-          "h-8 w-8 text-primary ",
+          "h-8 w-8 rounded-lg transition",
           hasVoted
-            ? "bg-primary/10 text-primary hover:bg-primary/20"
+            ? "bg-primary/20 text-primary"
             : "hover:bg-primary/10 hover:text-primary"
         )}
-        disabled={isPending}
       >
         <ChevronUpIcon className="size-5" />
       </Button>
-      <span className="text-sm font-semibold transition-colors text-foreground">
+
+      <span className="text-sm font-semibold text-foreground">
         {optimisticVoteCount}
       </span>
+
       <Button
         onClick={handleDownvote}
         variant="ghost"
         size="icon-sm"
         disabled={isPending}
         className={cn(
-          "h-8 w-8 text-primary ",
-          hasVoted ? "hover:text-destructive" : "opacity-50 cursor-not-allowed"
+          "h-8 w-8 rounded-lg transition",
+          hasVoted ? "hover:text-destructive" : "opacity-40 cursor-not-allowed"
         )}
       >
         <ChevronDownIcon className="size-5" />
