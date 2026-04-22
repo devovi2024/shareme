@@ -33,7 +33,7 @@ export default function Footer() {
         <div>
           <Logo />
           <p className="text-gray-600 mt-3">
-            ShareMe is your go-to platform to share ideas and projects.
+            iBuiltThis is your go-to platform to share ideas and projects.
           </p>
         </div>
 
@@ -52,7 +52,7 @@ export default function Footer() {
       </div>
 
       <div className="text-center text-sm text-gray-500 py-4">
-        © {year ?? "—"} ShareMe • Made with ❤️ by Ovi
+        © {year ?? "—"} iBuildThis •  Ovi
       </div>
     </footer>
   );
