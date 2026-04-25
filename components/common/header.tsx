@@ -44,6 +44,13 @@ export default function Header() {
               <CompassIcon className="size-4" />
               <span>Explore</span>
             </Link>
+            <Link
+              href="/admion"
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hover:bg-muted/50"
+            >
+              <CompassIcon className="size-4" />
+              <span>Become Admin</span>
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
