@@ -4,13 +4,14 @@ import {
   downvoteProductAction,
   upvoteProductAction,
 } from "@/lib/products/product-actions";
+
 import { cn } from "@/lib/utils";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { useOptimistic, useTransition } from "react";
+import { useOptimistic, useTransition, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export default function VotingButtons({
-  hasVoted,
+  hasVoted: initialHasVoted = false,
   voteCount: initialVoteCount,
   productId,
 }: {
@@ -18,24 +19,50 @@ export default function VotingButtons({
   voteCount: number;
   productId: number;
 }) {
-  const [optimisticVoteCount, setOptimisticVoteCount] = useOptimistic(
-    initialVoteCount,
-    (currentCount, change: number) => Math.max(0, currentCount + change)
-  );
-
   const [isPending, startTransition] = useTransition();
 
-  const handleUpvote = async () => {
+  const [hasVoted, setHasVoted] = useState(initialHasVoted);
+
+  const [optimisticVoteCount, setOptimisticVoteCount] = useOptimistic(
+    initialVoteCount,
+    (current, change: number) => current + change
+  );
+
+  const handleUpvote = () => {
+    if (isPending) return;
+
     startTransition(async () => {
-      setOptimisticVoteCount(1);
-      await upvoteProductAction(productId);
+      if (hasVoted) return;
+
+      setOptimisticVoteCount(+1);
+      setHasVoted(true);
+
+      try {
+        await upvoteProductAction(productId);
+      } catch {
+        // rollback
+        setOptimisticVoteCount(-1);
+        setHasVoted(false);
+      }
     });
   };
 
-  const handleDownvote = async () => {
+  const handleDownvote = () => {
+    if (isPending) return;
+
     startTransition(async () => {
+      if (!hasVoted) return;
+
       setOptimisticVoteCount(-1);
-      await downvoteProductAction(productId);
+      setHasVoted(false);
+
+      try {
+        await downvoteProductAction(productId);
+      } catch {
+        // rollback
+        setOptimisticVoteCount(+1);
+        setHasVoted(true);
+      }
     });
   };
 
@@ -47,11 +74,12 @@ export default function VotingButtons({
         e.stopPropagation();
       }}
     >
+      {/* UPVOTE */}
       <Button
         onClick={handleUpvote}
         variant="ghost"
         size="icon-sm"
-        disabled={isPending}
+        disabled={isPending || hasVoted}
         className={cn(
           "h-8 w-8 rounded-lg transition",
           hasVoted
@@ -62,18 +90,22 @@ export default function VotingButtons({
         <ChevronUpIcon className="size-5" />
       </Button>
 
-      <span className="text-sm font-semibold text-foreground">
+      {/* COUNT */}
+      <span className="text-sm font-semibold text-foreground tabular-nums">
         {optimisticVoteCount}
       </span>
 
+      {/* DOWNVOTE */}
       <Button
         onClick={handleDownvote}
         variant="ghost"
         size="icon-sm"
-        disabled={isPending}
+        disabled={isPending || !hasVoted}
         className={cn(
           "h-8 w-8 rounded-lg transition",
-          hasVoted ? "hover:text-destructive" : "opacity-40 cursor-not-allowed"
+          hasVoted
+            ? "hover:text-destructive"
+            : "opacity-40 cursor-not-allowed"
         )}
       >
         <ChevronDownIcon className="size-5" />

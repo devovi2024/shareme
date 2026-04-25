@@ -8,31 +8,36 @@ import { InboxIcon, ShieldIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default async function AdminPage() {
-  const { userId } = await auth();
+  const { userId } = auth();
 
   if (!userId) {
     redirect("/sign-in");
   }
 
-  const response = await clerkClient();
-  const user = await response.users.getUser(userId!);
+  const client = clerkClient;
 
-  const metadata = user.publicMetadata;
-  const isAdmin = metadata?.isAdmin ?? false;
+  const user = await client.users.getUser(userId);
+
+  const isAdmin = user.publicMetadata?.isAdmin === true;
 
   if (!isAdmin) {
     redirect("/");
   }
+
   const allProducts = await getAllProducts();
+
   const approvedProducts = allProducts.filter(
-    (product) => product.status === "approved"
+    (p) => p.status === "approved"
   );
+
   const pendingProducts = allProducts.filter(
-    (product) => product.status === "pending"
+    (p) => p.status === "pending"
   );
+
   const rejectedProducts = allProducts.filter(
-    (product) => product.status === "rejected"
+    (p) => p.status === "rejected"
   );
+
   return (
     <div className="py-20">
       <div className="wrapper">
@@ -43,6 +48,7 @@ export default async function AdminPage() {
             description="Review and manage submitted products"
           />
         </div>
+
         <StatsCard
           approved={approvedProducts.length}
           pending={pendingProducts.length}
@@ -56,16 +62,21 @@ export default async function AdminPage() {
               Pending Products ({pendingProducts.length})
             </h2>
           </div>
+
           <div className="space-y-4">
-            {pendingProducts.length === 0 && (
+            {pendingProducts.length === 0 ? (
               <EmptyState
                 message="No pending products to review"
                 icon={InboxIcon}
               />
+            ) : (
+              pendingProducts.map((product) => (
+                <AdminProductCard
+                  key={product.id}
+                  product={product}
+                />
+              ))
             )}
-            {pendingProducts.map((product) => (
-              <AdminProductCard key={product.id} product={product} />
-            ))}
           </div>
         </section>
 
@@ -73,9 +84,13 @@ export default async function AdminPage() {
           <div className="section-header-with-count">
             <h2 className="text-2xl font-bold">All Products</h2>
           </div>
+
           <div className="space-y-4">
             {allProducts.map((product) => (
-              <AdminProductCard key={product.id} product={product} />
+              <AdminProductCard
+                key={product.id}
+                product={product}
+              />
             ))}
           </div>
         </section>

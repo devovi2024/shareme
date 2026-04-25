@@ -6,8 +6,10 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <Suspense fallback={<div>Loading Admin...</div>}>{children}</Suspense>
+    <div className="min-h-screen bg-white">
+      <Suspense fallback={<div className="p-10">Loading Admin...</div>}>
+        {children}
+      </Suspense>
     </div>
   );
 }

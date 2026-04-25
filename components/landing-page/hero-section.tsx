@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,10 +22,12 @@ const LiveBadge = () => {
         border-border/50
       "
     >
-      <span className="relative flex h-2 w-2">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+      <span className="relative flex h-2 w-2 mr-2">
+        {/* safer animation wrapper */}
+        <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 animate-ping" />
         <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
       </span>
+
       <span className="text-muted-foreground">
         Join thousands of creators sharing their work
       </span>
@@ -37,7 +41,6 @@ const statsData = [
     icon: UsersIcon,
     value: "10K+",
     label: "Active Creators",
-    hasBorder: true,
   },
   { icon: EyeIcon, value: "50K+", label: "Monthly Visitors" },
 ];
@@ -45,12 +48,13 @@ const statsData = [
 export default function HeroSection() {
   return (
     <section className="relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-muted/30" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(120,119,198,0.15),transparent_60%)]" />
+      {/* Background (hydration-safe) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-muted/30 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(120,119,198,0.15),transparent_60%)] pointer-events-none" />
 
       <div className="wrapper relative">
         <div className="flex flex-col items-center justify-center lg:py-28 py-16 text-center">
+
           <LiveBadge />
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 max-w-5xl leading-tight">
@@ -101,6 +105,7 @@ export default function HeroSection() {
               <StatsCard key={stat.label} {...stat} />
             ))}
           </div>
+
         </div>
       </div>
     </section>

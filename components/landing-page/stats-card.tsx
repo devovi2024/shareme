@@ -14,15 +14,31 @@ export default function StatsCard({
 }) {
   return (
     <div
-      className={cn("relative text-center space-y-2px-4 py-3 rounded-xl bg-muted/30 backdrop-blur transition hover:bg-muted/50 ", hasBorder && "border-x border-border/50")}
+      className={cn(
+        "relative flex flex-col items-center justify-center text-center",
+        "rounded-2xl px-5 py-6",
+        "bg-background/40 backdrop-blur-md",
+        "transition-all duration-300",
+        "hover:-translate-y-1 hover:shadow-lg hover:bg-background/60",
+        "border border-border/40",
+        hasBorder && "border-x-0 sm:border-x"
+      )}
     >
-      <div className="flex items-center justify-center gap-2">
-        <Icon className="size-5 text-primary/70" />
+      {/* Icon + Value */}
+      <div className="flex items-center gap-2 mb-1">
+        <div className="p-2 rounded-xl bg-primary/10">
+          <Icon className="size-5 text-primary" />
+        </div>
+
         <p className="text-3xl sm:text-4xl font-bold tracking-tight">
           {value}
         </p>
       </div>
-      <p className="text-sm text-muted-foreground">{label}</p>
+
+      {/* Label */}
+      <p className="text-sm sm:text-base text-muted-foreground">
+        {label}
+      </p>
     </div>
   );
 }

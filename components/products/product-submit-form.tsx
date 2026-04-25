@@ -29,34 +29,37 @@ export default function ProductSubmitForm() {
 
   return (
     <div className="relative max-w-2xl mx-auto">
+
       {/* Glow background */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-purple-500/20 blur-2xl opacity-30 rounded-3xl" />
+      <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-purple-500/20 to-primary/10 blur-3xl opacity-30 rounded-3xl" />
 
       <form
+        action={formAction}
         className="
           relative space-y-6
-          p-8 rounded-2xl
-          border border-border/50
-          bg-background/80 backdrop-blur-xl
+          p-6 sm:p-8
+          rounded-2xl
+          border border-border/40
+          bg-background/70 backdrop-blur-xl
           shadow-xl
         "
-        action={formAction}
       >
-        {/* Header */}
+
+        {/* HEADER */}
         <div className="space-y-2">
-          <h2 className="text-xl font-semibold tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">
             Submit your product 🚀
           </h2>
           <p className="text-sm text-muted-foreground">
-            Share your product with the community and get feedback
+            Share your product with the community and get early feedback
           </p>
         </div>
 
-        {/* Alert */}
+        {/* ALERT */}
         {message && (
           <div
             className={cn(
-              "p-4 rounded-xl border text-sm font-medium",
+              "p-4 rounded-xl border text-sm font-medium transition",
               success
                 ? "bg-primary/10 border-primary/30 text-primary"
                 : "bg-destructive/10 border-destructive/30 text-destructive"
@@ -68,15 +71,15 @@ export default function ProductSubmitForm() {
           </div>
         )}
 
-        {/* Fields */}
+        {/* FIELDS */}
         <div className="space-y-5">
+
           <FormField
             label="Product Name"
             name="name"
             id="name"
             placeholder="My Awesome Product"
             required
-            onChange={() => {}}
             error={getFieldErrors("name")}
           />
 
@@ -86,7 +89,6 @@ export default function ProductSubmitForm() {
             id="slug"
             placeholder="my-awesome-product"
             required
-            onChange={() => {}}
             helperText="URL-friendly version of your product name"
             error={getFieldErrors("slug")}
           />
@@ -95,9 +97,8 @@ export default function ProductSubmitForm() {
             label="Tagline"
             name="tagline"
             id="tagline"
-            placeholder="A brief, catchy description"
+            placeholder="A short catchy description"
             required
-            onChange={() => {}}
             error={getFieldErrors("tagline")}
           />
 
@@ -107,9 +108,8 @@ export default function ProductSubmitForm() {
             id="description"
             placeholder="Tell us more about your product..."
             required
-            onChange={() => {}}
-            error={getFieldErrors("description")}
             textarea
+            error={getFieldErrors("description")}
           />
 
           <FormField
@@ -118,24 +118,23 @@ export default function ProductSubmitForm() {
             id="websiteUrl"
             placeholder="https://yourproduct.com"
             required
-            onChange={() => {}}
+            helperText="Your product landing page"
             error={getFieldErrors("websiteUrl")}
-            helperText="Enter your product's website or landing page"
           />
 
           <FormField
             label="Tags"
             name="tags"
             id="tags"
-            placeholder="AI, Productivity, SaaS"
+            placeholder="AI, SaaS, Productivity"
             required
-            onChange={() => {}}
+            helperText="Comma-separated tags"
             error={getFieldErrors("tags")}
-            helperText="Comma-separated tags (e.g., AI, SaaS, Productivity)"
           />
+
         </div>
 
-        {/* Submit */}
+        {/* SUBMIT BUTTON */}
         <Button
           type="submit"
           size="lg"
@@ -143,16 +142,17 @@ export default function ProductSubmitForm() {
           className="
             w-full h-12 rounded-xl
             bg-gradient-to-r from-primary to-primary/80
-            hover:opacity-90
+            hover:from-primary/90 hover:to-primary
             shadow-lg shadow-primary/20
-            transition-all
+            transition-all duration-300
+            disabled:opacity-60 disabled:cursor-not-allowed
           "
         >
           {isPending ? (
             <Loader2Icon className="size-4 animate-spin" />
           ) : (
             <>
-              <SparklesIcon className="size-4" />
+              <SparklesIcon className="size-4 mr-2" />
               Submit Product
             </>
           )}
